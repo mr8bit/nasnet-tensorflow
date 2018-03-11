@@ -1,26 +1,26 @@
-# nasnet-tensorflow
+# NASNet-tensorflow
 
-A nasnet in tensorflow based on tensorflow [slim](https://github.com/tensorflow/models/tree/master/research/slim) library.
-
-
-## About Nasnet and this repository
-
-Nasnet is so far the state-of-the-art image classification architecture on ImageNet dataset (ArXiv release date is 21 Jul. 2017), the single crop accuracy for nasnet-large model is reported to be 82.7. For details of nasnet, please refer to paper [Learning Transferable Architectures for Scalable Image Recognition](https://arxiv.org/abs/1707.07012) by Barret Zoph etc.
-
-With this repo., you should be able to:
-
-- Train a nasnet with customized dataset for image classification task from scratch. (If you want)
-
-- Finetune nasnet (nasnet-a-large, nasnet-a-mobile) from ImageNet pre-train model for image classification task.
-
-- Test and evaluate the model you have trained.
-
-- Deploy the model for your application or transfer the feature extractor to other tasks such as object detection. (By yourself)
-
-Suitable for those who have solid CNN knowledge, python and tensorflow background. For those who have less background, [tensorflow slim walk through tutorial](https://github.com/tensorflow/models/blob/master/research/slim/slim_walkthrough.ipynb) should be a good start.
+NASNet в tensorflow на основе tensorflow [slim](https://github.com/tensorflow/models/tree/master/research/slim) библиотеке.
 
 
-## Dependencies
+## О NASNet и этом репозиторее 
+
+NASNet до сих пор является современной архитектурой классификации изображений на наборе данных ImageNet (дата выпуска ArXiv - 21 июля 2017 года), точная точность обработки для крупной модели NASNet составляет 82,7. Подробнее о NASNet см. в документе  [Learning Transferable Architectures for Scalable Image Recognition](https://arxiv.org/abs/1707.07012) by Barret Zoph etc.
+
+С помощью этого репозитория вы сможете:
+
+-  Обучить  NASNet с помощью настраиваемого набора данных для задачи классификации изображений с нуля. (If you want)
+
+- Точная настройка NASNet (nasnet-a-large, nasnet-a-mobile) из модели Pre-train ImageNet для задачи классификации изображений.
+
+-  Проверьте и оцените модель, которую вы обучили.
+
+-  Разверните модель для вашего приложения или перенесите экстрактор функций на другие задачи, такие как обнаружение объектов (By yourself)
+
+Подходить для тех, у кого есть солидный опыт работы с CNN, Tenserflow. У кого мало опыта работы или вообще нет [прочитайте "tensorflow slim walk through tutorial"](https://github.com/tensorflow/models/blob/master/research/slim/slim_walkthrough.ipynb).
+
+
+## Зависимости
 tensorflow >= 1.4.0
 
 tf.contrib.slim
@@ -28,16 +28,17 @@ tf.contrib.slim
 numpy
 
 
-## Usage
-### Clone the repo and enter workspace.
+## Использование
+### Скопировать репозиторий и войти в workspace.
 ```shell
 git clone https://github.com/yeephycho/nasnet-tensorflow.git
 cd nasnet-tensorflow
 mkdir train pre-trained
 ```
 
-### Download and converting to TFRecord format (This part is the same as tf.slim tutorial)
-Many people would be interested in training Nasnet with their own data. I'm not sure whether it's a good idea to promote my repo. by using a dataset that provided by google's tutorial. Many people see the tfrecord generation code is a copy of tensorflow's solution, they just give up or send me an e-mail to ask how to train on customized dataset as I promised. However, if you spend some time on code, you would be able to find out that it may not be very easy to hard coding the tfrecord generation script by yourself but it's really easy for you to modify the template code and flower dataset is a very very good template for you to modify. So, before sending me e-mail, please spend half a hour on the following scripts:
+### Загрузите и конвертируйте в формат TFRecord (эта часть совпадает с учебником tf.slim)
+Много людей были заинтересованы в обучении Nasnet своими собственными данными.Я не уверен, что это хорошая идея для продвижения моего репозитория. Я используя набор данных, который предоставляется в учебнике Google. Если вы потратите некоторое время на код, вы сможете узнать, что может быть нелегко изменить сценарий генерации tfrecord самостоятельно, но вам очень легко изменить код шаблона, а цветовой набор данных - очень очень хороший шаблон для вас, чтобы изменить.
+
 ```shell
 train_image_classifier.py
 download_and_convert_data.py
@@ -45,16 +46,16 @@ datasets/dataset_factory.py
 datasets/download_and_convert_flowers.py
 datasets/flowers.py
 ```
-Just by modifing a few characters, you would be able to turn your own dataset into tfrecords.
 
-The following instruction will lead you to generate tutorial tfrecords.
+Просто изменив несколько строк, вы сможете конвертировать свой набор данных в tfrecords.
 
-For each dataset, we'll need to download the raw data and convert it to
-TensorFlow's native
+Следующая инструкция приведет вас к созданию обучающих tfrecords.
+
+Для каждого набора данных нам нужно загрузить необработанные данные и преобразовать их в TensorFlow's native
 [TFRecord](https://www.tensorflow.org/versions/r0.10/api_docs/python/python_io.html#tfrecords-format-details)
-format. Each TFRecord contains a
+формат. Каждый TFRecord содержит
 [TF-Example](https://github.com/tensorflow/tensorflow/blob/r0.10/tensorflow/core/example/example.proto)
-protocol buffer. Below we demonstrate how to do this for the Flowers dataset.
+буфер протокола. Ниже мы продемонстрируем, как это сделать для набора данных Flowers.
 
 ```shell
 $ DATA_DIR=/tmp/data/flowers
@@ -63,7 +64,7 @@ $ python download_and_convert_data.py \
     --dataset_dir="${DATA_DIR}"
 ```
 
-When the script finishes you will find several TFRecord files created:
+Когда скрипт завершится, вы найдете несколько файлов TFRecord:
 
 ```shell
 $ ls ${DATA_DIR}
@@ -76,42 +77,40 @@ flowers_validation-00004-of-00005.tfrecord
 labels.txt
 ```
 
-These represent the training and validation data, sharded over 5 files each.
-You will also find the `$DATA_DIR/labels.txt` file which contains the mapping
-from integer labels to class names.
+Они представляют данные обучения и валидации, составленные по 5 файлов каждый.
+Вы также найдете файл `$DATA_DIR/labels.txt`, который содержит сопоставление целых меток с именами классов.
+Здесь я предоставляю вам удобную версию решения для генерации tfrecord.
+Все, что вам нужно изменить, находится по адресу
 
-I provide a user friendly version of tfrecord generation solution here.
-All you need to modify is located at 
 ```shell
 datasets/customized.py
 ```
-Line 36, the number of training set and validation (test) set.
+Строка 36, количество установленных наборов тренировок и проверки (теста).
 
-Line 39, the number of total classes.
+Строка 39, количество полных классов.
 
 ```shell
 datasets/convert_customized.py
 ```
-Line 61, the number of validation (test) set.
-
+Строка 61, номер проверки (теста).
 
 ```shell
-# Create directories that name after the labels, then put the images under the label folders.
+# Создайте каталоги, имена которых называются labelN(метки, классы объектов), затем помещайте изображения в соответсвующие каталоги.
 # ls /path/to/your/dataset/
 # label0, label1, label2, ...
 # ls /path/to/your/dataset/label0
 # label0_image0.jpg, label0_image1.jpg, ...
 #
-# Image file name doesn't really matter.
+# Название файла изображения не имеет большого значения.
 DATASET_DIR=/path/to/your/own/dataset/
 
-# Convert the customized data into tfrecords. Be noted that the dataset_name must be "customized"!
+# Преобразование настроенных данных в tfrecords. Следует отметить, что  dataset_name должно быть  "customized"!
 python convert_customized_data.py \
     --dataset_name=customized \
     --dataset_dir="${DATASET_DIR}"
 ```
 
-### Train from scratch
+### Поезд с нуля
 ```shell
 DATASET_DIR=/tmp/data/flowers # /path/to/your/own/dataset/
 TRAIN_DIR=./train
@@ -135,15 +134,15 @@ python train_image_classifier.py \
     --model_name=nasnet_large
 ```
 
-### Finetune from ImageNet pre-trained checkpoint
+### Точная настройка с предварительно установленной контрольной точки ImageNet
 ```shell
-# This script will download pre-trained model from google, mv the file to pre-trained folder and unzip the file.
+# Этот скрипт загрузит предварительно подготовленную модель из Google, переместите файл вы предварительно подготовленную папку и распакует файл.
 sh download_pretrained_model.sh
 
 DATASET_DIR=/tmp/data/flowers # /path/to/your/own/dataset/
 TRAIN_DIR=./train
 
-# For Nasnet-a-mobile
+# Для Nasnet-a-mobile
 # --dataset_name=customized
 CHECKPOINT_PATH=./pre-trained/nasnet-a_mobile_04_10_2017/model.ckpt
 python train_image_classifier.py \
@@ -156,7 +155,7 @@ python train_image_classifier.py \
     --checkpoint_exclude_scopes=final_layer,aux_7 \
     --trainable_scopes=final_layer,aux_7
 
-# For Nasnet-a-large
+# Для Nasnet-a-large
 # --dataset_name=customized
 CHECKPOINT_PATH=./pre-trained/nasnet-a_large_04_10_2017/model.ckpt
 python train_image_classifier.py \
@@ -170,8 +169,8 @@ python train_image_classifier.py \
     --trainable_scopes=final_layer,aux_11
 ```
 
-### Evaluation
-A nasnet finetuned model for flowers dataset can be downloaded [here](https://drive.google.com/open?id=1l_hhQoE6T4rc69OpRMJ8geQXzgTnXqUC) from google drive.
+### Ооценка
+Можно загрузить загрузочную модель для набора цветов для nasnet [здесь](https://drive.google.com/open?id=1l_hhQoE6T4rc69OpRMJ8geQXzgTnXqUC) из google drive.
 
 ```shell
 # Please specify the model.ckpt-xxxx file by yourself, for example
